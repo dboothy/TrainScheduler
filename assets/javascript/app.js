@@ -23,23 +23,24 @@ submit employee info to firebase
     declare variables that retrieve form input data
     push the employee object to the firebase database
     */
-$(document).on("click", "#add-employee-btn", function(e){
+$(document).on("click", "#add-train-btn", function(e){
     e.preventDefault()
 
     // Gather input from form
-    var employeeName = $("#employee-name-input").val()
-    var roleName = $("#role-input").val()
-    var startInput = $("#start-input").val()
-    var rateInput = $("#rate-input").val()
-    console.log(employeeName, roleName, startInput, rateInput)
+    var trainName = $("#train-name-input").val()
+    var destName = $("#destination-input").val()
+    var trainTime = $("#trainTime-input").val()
+    var freqInput = $("#frequency-input").val()
+   
+    console.log(trainName, destName, trainTime, freqInput)
 
 
     // Insert new object into database
     database.ref().push({
-        employeeName: employeeName, 
-        roleName: roleName,
-        startInput: startInput,
-        rateInput: rateInput
+        trainName: trainName, 
+        destName: destName,
+        trainTime: trainTime,
+        freqInput: freqInput
     }) 
     
 })
@@ -52,18 +53,20 @@ database.ref().on("child_added", function(snapshot){
         2. calculate nextArrival and minutesAway
         3. use JQuery to append to DOM
     */
-    const newEmployee = {
-        name: snapshot.val().employeeName,
-        role: snapshot.val().roleName,
-        startDate: snapshot.val().startInput,
-        rate: snapshot.val().rateInput
+    const newTrain = {
+        trainName: snapshot.val().trainName,
+        destName: snapshot.val().destName,
+        trainTime: snapshot.val().trainTime,
+        freqInput: snapshot.val().freqInput
     }
 
-    newEmployee.monthsWorked = Math.abs(moment(newEmployee.startDate).diff(moment.now(), 'months'))
 
-    newEmployee.totalBilled = newEmployee.monthsWorked * newEmployee.rate;
 
-    console.log(newEmployee)
+    // .trainTime = Math.abs(moment(newTrain.freqInput).diff(moment.now(), 'months'))
+
+    // newTrain.totalBilled = newTrain.monthsWorked * newTrain.rate;
+
+    // console.log(newTrain)
 
 
     // snapshot = copy of object added to database
@@ -73,19 +76,14 @@ database.ref().on("child_added", function(snapshot){
     // var nextArrival = moment.things
     // var minutesAway = use moment to find difference in time beteen now and nextArrival (moment.now())
 
-    var table = $("tbody")
+    // var table = $("tbody")
 
-    table.append("<tr><td>"+snapshot.val().employeeName+"</td>" +"<td>" +snapshot.val().roleName +"</td>"+"<td>"+snapshot.val().startInput+"</td>"+"<td>"+newEmployee.monthsWorked+"</td><td>"+newEmployee.rate+"</td><td>"+newEmployee.totalBilled+"</td>" );
+    // table.append("<tr><td>"+snapshot.val().trainName+"</td>" +"<td>" +snapshot.val().destName +"</td>"+"<td>"+snapshot.val().freqInput+"</td>")
+
+        // +"<td>"+newEmployee.monthsWorked+"</td><td>"+newEmployee.rate+"</td><td>"+newEmployee.totalBilled+"</td>" );
 
 
 })
-
-
-
-
-
-
-
 
 
 
