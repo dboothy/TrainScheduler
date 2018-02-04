@@ -1,3 +1,4 @@
+$(document).ready(function(){  
 // Initialize Firebase
     var config = {
     apiKey: "AIzaSyAoVYsXKQOY7CDGb4kxBUqfUUyLPbO9Dzk",
@@ -11,11 +12,9 @@
     firebase.initializeApp(config);
 
 
-    var database = firebase.database();
+    var database = firebase.database(); 
 
-$(document).ready(function(){   
-
-console.log("connected to html")
+//console.log("connected to html")
 
 //////////////////////////////////////////////////////
 /* 
@@ -23,69 +22,95 @@ submit employee info to firebase
     declare variables that retrieve form input data
     push the employee object to the firebase database
     */
-$(document).on("click", "#add-train-btn", function(e){
-    e.preventDefault()
+    $(document).on("click", "#add-train-btn", function(e){
+        e.preventDefault()
 
-    // Gather input from form
-    var trainName = $("#train-name-input").val()
-    var destName = $("#destination-input").val()
-    var trainTime = $("#trainTime-input").val()
-    var freqInput = $("#frequency-input").val()
-   
-    console.log(trainName, destName, trainTime, freqInput)
+        // Gather input from form
+        var trainName = $("#train-name-input").val().trim()
+        var destName  = $("#destination-input").val().trim()
+        var trainTime = $("#trainTime-input").val().trim()
+        var freqInput = $("#frequency-input").val().trim()
+       
+        //console.log(trainName, destName, trainTime, freqInput)
 
 
-    // Insert new object into database
-    database.ref().push({
-        trainName: trainName, 
-        destName: destName,
-        trainTime: trainTime,
-        freqInput: freqInput
-    }) 
-    
+        var newTrain = {
+            trainName: trainName, 
+            destName:  destName,
+            trainTime: trainTime,
+            freqInput: freqInput
+        }
+        // Insert new object into database
+        database.ref().push(newTrain); 
 })
 
 
 // Instructions on what to do when a new object is inserted into database
-database.ref().on("child_added", function(snapshot){
-    /*
-        1. get copy of new object
-        2. calculate nextArrival and minutesAway
-        3. use JQuery to append to DOM
-    */
-    const newTrain = {
-        trainName: snapshot.val().trainName,
-        destName: snapshot.val().destName,
-        trainTime: snapshot.val().trainTime,
-        freqInput: snapshot.val().freqInput
-    }
+    database.ref().on("child_added", function(snapshot){
+
+          //console.log(snapshot.val());
+        /*
+            1. get copy of new object
+            2. calculate nextArrival and minutesAway
+            3. use JQuery to append to DOM
+        */
+
+      
+
+              // Getting the frequency of each train
+  
+              // Retriving the start time of each train
+             
+              // Converting the first train to leave
+              
+              // Current time
+
+              // Difference in time
+             
+              // Time apart
+
+    
+        var trainName = snapshot.val().trainName;
+        var destName =  snapshot.val().destName;
+        var trainTime =  snapshot.val().trainTime; 
+        console.log(trainTime);
+
+        // console.log(moment().hours(splitTime[0]).minutes(splitTime[1]))]
+        var freqInput = snapshot.val().freqInput;    //convert newTrain.freqInput to int first 
+        var currentTime = moment().format("HH:mm");
+        console.log(currentTime);
+        var nextArrival = null; 
+        var minutesAway = null;
 
 
+        // subtravt hours and subrat min both need to be ints to do this
 
-    // .trainTime = Math.abs(moment(newTrain.freqInput).diff(moment.now(), 'months'))
-
-    // newTrain.totalBilled = newTrain.monthsWorked * newTrain.rate;
-
-    // console.log(newTrain)
-
-
-    // snapshot = copy of object added to database
-
-    // Use moment to calculate next arrival and how many minutes away
-
-    // var nextArrival = moment.things
-    // var minutesAway = use moment to find difference in time beteen now and nextArrival (moment.now())
-
-    // var table = $("tbody")
-
-    // table.append("<tr><td>"+snapshot.val().trainName+"</td>" +"<td>" +snapshot.val().destName +"</td>"+"<td>"+snapshot.val().freqInput+"</td>")
-
-        // +"<td>"+newEmployee.monthsWorked+"</td><td>"+newEmployee.rate+"</td><td>"+newEmployee.totalBilled+"</td>" );
+        /*ie 20:00 - 13:10
+                ||
+         20 00 - 13 10 */
+        //var result = currentTime - moment(newTrain.trainTime).format("HH:mm"); 
 
 
-})
+        //console.log(result);
+
+        // reslut = (result / newTrain.freqInput).ceil();//  round this up 
+        // reslut = result * newTrain.freqInput;
+        // result = result / 60
+        // nextArrival = result + newTrain.trainTime // result maybe a deial
+        // minutesAway = currentTime - nextArrival;
+
+        
+
+        var table = $("tbody");
+
+        table.append(`<tr>
+                        <td>${trainName}</td>
+                        <td>${destName}</td>
+                        <td>${freqInput}</td>
+                        <td>${nextArrival}</td>
+                        <td>${minutesAway}</td>
+                    </tr>`);
 
 
-
-
-})
+    })
+});
