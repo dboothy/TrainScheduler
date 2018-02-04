@@ -36,8 +36,10 @@ submit employee info to firebase
         var freqInput = $("#frequency-input").val().trim()
        
         //console.log(trainName, destName, trainTime, freqInput)
+ trainTime = moment(moment(trainTime,"hh:mm A").subtract(1, "years"),"hh:mm").format("hh:mm A");
 
 
+console.log(trainTime);
         var newTrain = {
             trainName: trainName, 
             destName:  destName,
@@ -87,6 +89,16 @@ submit employee info to firebase
         var minutesAway = null;
 
 
+        var diff = moment().diff(moment(trainTime,"hh:mm A"),"m");
+        var modTime = diff % freqInput;
+        var minutesAway = freqInput - modTime
+
+        console.log(minutesAway)
+
+        nextArrival = moment().add(minutesAway, "m");
+
+        var actualArrive = moment(nextArrival).format("hh:mm A")
+
         // subtravt hours and subrat min both need to be ints to do this
 
         /*ie 20:00 - 13:10
@@ -111,7 +123,7 @@ submit employee info to firebase
                         <td>${trainName}</td>
                         <td>${destName}</td>
                         <td>${freqInput}</td>
-                        <td>${nextArrival}</td>
+                        <td>${actualArrive}</td>
                         <td>${minutesAway}</td>
                     </tr>`);
 
