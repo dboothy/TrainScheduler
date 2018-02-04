@@ -1,4 +1,6 @@
 $(document).ready(function(){  
+
+
 // Initialize Firebase
     var config = {
     apiKey: "AIzaSyAoVYsXKQOY7CDGb4kxBUqfUUyLPbO9Dzk",
@@ -15,6 +17,8 @@ $(document).ready(function(){
     var database = firebase.database(); 
 
 //console.log("connected to html")
+
+console.log(moment())
 
 //////////////////////////////////////////////////////
 /* 
@@ -113,4 +117,6 @@ submit employee info to firebase
 
 
     })
+
+
 });
