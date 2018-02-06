@@ -1,7 +1,7 @@
 $(document).ready(function(){  
 
 
-// Initialize Firebase
+    // Initialize Firebase
     var config = {
     apiKey: "AIzaSyAoVYsXKQOY7CDGb4kxBUqfUUyLPbO9Dzk",
     authDomain: "fir-time-517f2.firebaseapp.com",
@@ -12,34 +12,24 @@ $(document).ready(function(){
     };
 
     firebase.initializeApp(config);
-
-
+    
+    //----------------------------------------------------//
+    /////////// Set ups connection to Firebase Database /////
     var database = firebase.database(); 
 
-//console.log("connected to html")
-
-console.log(moment())
-
-//////////////////////////////////////////////////////
-/* 
-submit employee info to firebase 
-    declare variables that retrieve form input data
-    push the employee object to the firebase database
-    */
-    $(document).on("click", "#add-train-btn", function(e){
-        e.preventDefault()
+    //------------------on click submit btn event------------------------//
+    $(document).on("click", "#add-train-btn", function(event){
+        event.preventDefault()
 
         // Gather input from form
-        var trainName = $("#train-name-input").val().trim()
-        var destName  = $("#destination-input").val().trim()
-        var trainTime = $("#trainTime-input").val().trim()
-        var freqInput = $("#frequency-input").val().trim()
+        var trainName = $("#train-name-input").val().trim();
+        var destName  = $("#destination-input").val().trim();
+        var trainTime = $("#trainTime-input").val().trim();
+        var freqInput = $("#frequency-input").val().trim();
        
         //console.log(trainName, destName, trainTime, freqInput)
- trainTime = moment(moment(trainTime,"hh:mm A").subtract(1, "years"),"hh:mm").format("hh:mm A");
 
-
-console.log(trainTime);
+        //on click event assign values of inputs to object
         var newTrain = {
             trainName: trainName, 
             destName:  destName,
@@ -48,84 +38,50 @@ console.log(trainTime);
         }
         // Insert new object into database
         database.ref().push(newTrain); 
-})
+    })
 
 
-// Instructions on what to do when a new object is inserted into database
-    database.ref().on("child_added", function(snapshot){
-
-          //console.log(snapshot.val());
-        /*
-            1. get copy of new object
-            2. calculate nextArrival and minutesAway
-            3. use JQuery to append to DOM
-        */
-
-      
-
-              // Getting the frequency of each train
-  
-              // Retriving the start time of each train
-             
-              // Converting the first train to leave
-              
-              // Current time
-
-              // Difference in time
-             
-              // Time apart
-
-    
-        var trainName = snapshot.val().trainName;
-        var destName =  snapshot.val().destName;
-        var trainTime =  snapshot.val().trainTime; 
-        console.log(trainTime);
-
-        // console.log(moment().hours(splitTime[0]).minutes(splitTime[1]))]
-        var freqInput = snapshot.val().freqInput;    //convert newTrain.freqInput to int first 
-        var currentTime = moment().format("HH:mm");
-        console.log(currentTime);
-        var nextArrival = null; 
-        var minutesAway = null;
+        // Instructions on what to do when a new object is inserted into database
+        database.ref().on("child_added", function(snapshot){
+            
 
 
-        var diff = moment().diff(moment(trainTime,"hh:mm A"),"m");
-        var modTime = diff % freqInput;
-        var minutesAway = freqInput - modTime
+            //on event child_added in firebase, capture object values with jQuery
+            var trainName = snapshot.val().trainName;
+            var destName =  snapshot.val().destName;
+            var trainTime =  snapshot.val().trainTime; 
+            var freqInput = snapshot.val().freqInput; 
+            //test current time format HH:mm moment.js
+            console.log()   
+            var currentTime = moment().format("HH:mm");
+            //moment.js - takes difference of current time and "first train's time and formats time display"
+            var diff = moment().diff(moment(trainTime,"hh:mm A"),"m");
+            //modulus aka remainder of difference and frequency of train stops
+            var modTime = diff % freqInput;
+            //subtract answer from frequency of trainstops to get minutes away
+            var minutesAway = freqInput - modTime
 
-        console.log(minutesAway)
+            console.log(minutesAway)
 
-        nextArrival = moment().add(minutesAway, "m");
+            //add the minutes away (train is to the next stop) to the current time in minutes format
 
-        var actualArrive = moment(nextArrival).format("hh:mm A")
+            nextArrival = moment().add(minutesAway, "m");
 
-        // subtravt hours and subrat min both need to be ints to do this
+            //convert those minutes back into AM/PM format
 
-        /*ie 20:00 - 13:10
-                ||
-         20 00 - 13 10 */
-        //var result = currentTime - moment(newTrain.trainTime).format("HH:mm"); 
+            var actualArrive = moment(nextArrival).format("hh:mm A")
 
+            
+            //use JQuery to append values to DOM
+            var table = $("tbody");
 
-        //console.log(result);
-
-        // reslut = (result / newTrain.freqInput).ceil();//  round this up 
-        // reslut = result * newTrain.freqInput;
-        // result = result / 60
-        // nextArrival = result + newTrain.trainTime // result maybe a deial
-        // minutesAway = currentTime - nextArrival;
-
-        
-
-        var table = $("tbody");
-
-        table.append(`<tr>
-                        <td>${trainName}</td>
-                        <td>${destName}</td>
-                        <td>${freqInput}</td>
-                        <td>${actualArrive}</td>
-                        <td>${minutesAway}</td>
-                    </tr>`);
+            table.append(`<tr>
+                            <td>${trainName}</td>
+                            <td>${destName}</td>
+                            <td>${freqInput}</td>
+                            <td>${actualArrive}</td>
+                            <td>${minutesAway}</td>
+                        </tr>`);
 
 
     })
