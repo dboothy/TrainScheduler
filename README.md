@@ -3,5 +3,5 @@ Train schedule application that incorporates Firebase to host arrival and depart
 
 Getting Started
 
-![picture](assets/images/html-image)
-![picture](assets/images/firebase)
+![picture](assets/images/html-image.png)
+![picture](assets/images/firebase.png)
