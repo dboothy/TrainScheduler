@@ -23,9 +23,13 @@ $(document).ready(function(){
 
         // Gather input from form
         var trainName = $("#train-name-input").val().trim();
+        console.log(trainName)
         var destName  = $("#destination-input").val().trim();
+        console.log(destName)
         var trainTime = $("#trainTime-input").val().trim();
+        console.log(trainTime)
         var freqInput = $("#frequency-input").val().trim();
+        console.log(freqInput)
        
         //console.log(trainName, destName, trainTime, freqInput)
 
@@ -56,12 +60,13 @@ $(document).ready(function(){
             var currentTime = moment().format("HH:mm");
             //moment.js - takes difference of current time and "first train's time and formats time display"
             var diff = moment().diff(moment(trainTime,"hh:mm A"),"m");
+            console.log(diff)
             //modulus aka remainder of difference and frequency of train stops
             var modTime = diff % freqInput;
             //subtract answer from frequency of trainstops to get minutes away
             var minutesAway = freqInput - modTime
 
-            console.log(minutesAway)
+            // console.log(minutesAway)
 
             //add the minutes away (train is to the next stop) to the current time in minutes format
 
